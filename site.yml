@@ -13,6 +13,11 @@
 - name: Synchronize certificates to remote servers
   hosts: acme_targets
   tasks:
+    - name: "Install rsync"
+      become: true
+      ansible.builtin.package:
+        name: rsync
+
     - name: Synchronize certificates to remote servers
       delegate_to: "{{ groups['acme_controller'][0] }}"
       ansible.posix.synchronize:
