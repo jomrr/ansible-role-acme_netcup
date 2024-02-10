@@ -14,7 +14,6 @@
   hosts: acme_targets
   tasks:
     - name: Synchronize certificates to remote servers
-      become: true
       delegate_to: "{{ groups['acme_controller'][0] }}"
       ansible.posix.synchronize:
         src: "{{ acme_netcup_dir | default('/etc/acme-staging') }}"
