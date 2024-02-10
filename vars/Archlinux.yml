@@ -1,0 +1,10 @@
+---
+# role: ansible-role-acme_netcup
+# file: vars/Archlinux.yml
+
+acme_netcup_packages:
+  - openssl
+  - python-dnspython
+  - python-pip
+
+acme_netcup_pip_extra_args: "--break-system-packages --user --upgrade"

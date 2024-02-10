@@ -1,0 +1,42 @@
+---
+# role: ansible-role-acme_netcup
+# file: defaults/main.yml
+
+# Account and domain configuration for netcup dns challenge
+# default: []
+acme_netcup_conf: []
+#  - name: home
+#    email: admin@example.com
+#    netcup_cid: 081500
+#    netcup_key: testkey
+#    netcup_pwd: testpwd
+#    domains:
+#      - example.com
+
+# Deactivate authentication objects (authz) after issuing a certificate
+# default: true
+acme_netcup_deactivate_authzs: true
+
+# Debug flag
+# default: false
+acme_netcup_debug: false
+
+# Target directory for accounts, keys, csrs and certificates.
+# default: /etc/acme-staging
+acme_netcup_dir: /etc/acme-staging
+
+# The letsecrypt endpoint / directory to use, defaults to staging.
+# staging: https://acme-staging-v02.api.letsencrypt.org/directory
+# production: https://acme-v02.api.letsencrypt.org/directory
+#
+# default: "https://acme-staging-v02.api.letsencrypt.org/directory"
+acme_netcup_endpoint: "https://acme-staging-v02.api.letsencrypt.org/directory"
+
+# nolog option, true ~= do not log, false ~= log
+# default: true
+acme_netcup_nolog: true
+
+# Remaining days a certificate must be valid, before it is renewed.
+# cert_days < remaining_days
+# default: 20
+acme_netcup_remaining_days: 20

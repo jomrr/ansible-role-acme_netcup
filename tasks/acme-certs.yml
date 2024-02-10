@@ -1,0 +1,33 @@
+---
+# role: ansible-role-acme_netcup
+# file: tasks/acme-certs.yml
+
+- name: Obtain certificates
+  become: true
+  community.crypto.acme_certificate:
+    account_key_src: "{{ acme_netcup_challenges[_domain].account_key }}"
+    acme_directory: "{{ acme_netcup_endpoint }}"
+    acme_version: 2
+    chain_dest: "{{ acme_netcup_dir }}/certs/{{ _domain }}-chain.pem"
+    challenge: "dns-01"
+    csr: "{{ acme_netcup_dir }}/csrs/{{ _domain }}.csr"
+    data: "{{ acme_netcup_challenges[_domain].data }}"
+    deactivate_authzs: "{{ acme_netcup_deactivate_authzs | default(omit) }}"
+    dest: "{{ acme_netcup_dir }}/certs/{{ _domain }}.pem"
+    fullchain_dest: "{{ acme_netcup_dir }}/certs/{{ _domain }}-fullchain.pem"
+    remaining_days: "{{ acme_netcup_remaining_days }}"
+  register: _certificate
+
+- name: Delete TXT records for DNS challenge
+  no_log: "{{ acme_netcup_nolog }}"
+  community.general.netcup_dns:
+    api_key: "{{ acme_netcup_data[item].account.netcup_key }}"
+    api_password: "{{ acme_netcup_data[item].account.netcup_pwd }}"
+    customer_id: "{{ acme_netcup_data[item].account.netcup_cid }}"
+    domain: "{{ item | regex_replace('^\\*\\.', '') }}"
+    name: "{{ acme_netcup_data[item].data.resource }}"
+    type: "TXT"
+    value: "{{ acme_netcup_data[item].data.resource_value }}"
+    state: absent
+  loop: "{{ acme_netcup_data.keys() | list | select('search', _domain) }}"
+  when: acme_netcup_data[_domain].data.resource is defined

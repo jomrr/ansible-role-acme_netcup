@@ -1,0 +1,23 @@
+---
+# role: ansible-role-acme_netcup
+# file: site.yml
+
+# Playbook for running role with semaphore and distributing certificates
+- name: Create letsencrypt certificates
+  hosts: acme_controller
+  tasks:
+    - name: Include role for creating letsencrypt certificates
+      ansible.builtin.include_role:
+        name: "{{ playbook_dir }}"
+
+- name: Synchronize certificates to remote servers
+  hosts: acme_targets
+  tasks:
+    - name: Synchronize certificates to remote servers
+      become: true
+      delegate_to: "{{ groups['acme_controller'][0] }}"
+      ansible.posix.synchronize:
+        src: "{{ acme_netcup_dir | default('/etc/acme-staging') }}"
+        dest: "/etc"
+        mode: push
+        archive: true

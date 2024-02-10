@@ -1,0 +1,10 @@
+---
+# role: ansible-role-acme_netcup
+# file: vars/Suse.yml
+
+acme_netcup_packages:
+  - openssl
+  - python3-dnspython
+  - python3-pip
+
+acme_netcup_pip_extra_args: "--user --upgrade"

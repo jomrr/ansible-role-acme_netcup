@@ -1,0 +1,44 @@
+---
+# role: ansible-role-acme_netcup
+# file: tasks/main.yml
+
+- name: "Include distribution-specific variables"
+  ansible.builtin.include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "{{ ansible_distribution }}.yml"
+        - "{{ ansible_os_family }}.yml"
+        - "main.yml"
+      paths:
+        - vars
+
+- name: "Install packages"
+  become: true
+  ansible.builtin.package:
+    name: "{{ acme_netcup_packages }}"
+    state: present
+
+- name: "Install nc-dnsapi python package"
+  ansible.builtin.pip:
+    name: "nc-dnsapi"
+    extra_args: "{{ acme_netcup_pip_extra_args }}"
+
+- name: "Create acme directory structure"
+  become: true
+  ansible.builtin.file:
+    path: "{{ acme_netcup_dir }}/{{ item }}"
+    owner: root
+    group: root
+    mode: "0755"
+    state: directory
+  loop:
+    - accounts
+    - certs
+    - csrs
+    - keys
+
+- name: "Include acme.yml"
+  no_log: "{{ acme_netcup_nolog }}"
+  ansible.builtin.include_tasks:
+    file: tasks/acme.yml
+  when: acme_netcup_conf | length > 0

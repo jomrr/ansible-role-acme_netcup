@@ -1,0 +1,11 @@
+---
+# role: ansible-role-acme_netcup
+# file: vars/openSUSE Tumbleweed.yml
+
+acme_netcup_packages:
+  - openssl
+  - python3-dnspython
+  - python3-packaging
+  - python3-pip
+
+acme_netcup_pip_extra_args: "--break-system-packages --user --upgrade"

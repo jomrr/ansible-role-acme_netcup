@@ -1,0 +1,88 @@
+---
+# role: ansible-role-acme_netcup
+# file: tasks/acme-challenges.yml
+
+- name: "Check if private key exists"
+  ansible.builtin.stat:
+    path: "{{ acme_netcup_dir }}/keys/{{ _domain }}.pem"
+  register: _private_key
+
+- name: "Generate private key"
+  become: true
+  no_log: "{{ acme_netcup_nolog }}"
+  community.crypto.openssl_privatekey:
+    path: "{{ acme_netcup_dir }}/keys/{{ _domain }}.pem"
+  when: not _private_key.stat.exists
+
+- name: "Check if CSR exists"
+  ansible.builtin.stat:
+    path: "{{ acme_netcup_dir }}/csrs/{{ _domain }}.csr"
+  register: _csr
+
+- name: "Generate CSR"
+  become: true
+  no_log: "{{ acme_netcup_nolog }}"
+  community.crypto.openssl_csr:
+    path: "{{ acme_netcup_dir }}/csrs/{{ _domain }}.csr"
+    privatekey_path: "{{ acme_netcup_dir }}/keys/{{ _domain }}.pem"
+    common_name: "{{ _domain }}"
+    subject_alt_name:
+      - "DNS:*.{{ _domain }}"
+      - "DNS:{{ _domain }}"
+  when: not _csr.stat.exists
+
+- name: "Create ACME challenge"
+  become: true
+  community.crypto.acme_certificate:
+    acme_directory: "{{ acme_netcup_endpoint }}"
+    acme_version: 2
+    account_key_src: "{{ acme_netcup_account_key_path }}"
+    csr: "{{ acme_netcup_dir }}/csrs/{{ _domain }}.csr"
+    challenge: "dns-01"
+    dest: "{{ acme_netcup_dir }}/certs/{{ _domain }}.pem"
+    chain_dest: "{{ acme_netcup_dir }}/certs/{{ _domain }}-chain.pem"
+    fullchain_dest: "{{ acme_netcup_dir }}/certs/{{ _domain }}-fullchain.pem"
+    remaining_days: "{{ acme_netcup_remaining_days }}"
+    terms_agreed: true
+  register: _challenge
+
+- name: "Debug _challenge"
+  ansible.builtin.debug:
+    msg: "{{ _challenge }}"
+  when: acme_netcup_debug | bool
+
+- name: "Set fact acme_netcup_data block"
+  when: _challenge.cert_days < acme_netcup_remaining_days
+  block:
+    - name: "Set fact acme_netcup_data (domain)"
+      ansible.builtin.set_fact:
+        acme_netcup_data: >-
+          {{ acme_netcup_data | default({}) |
+          combine({_domain: {'data': _challenge.challenge_data[_domain]['dns-01'] | default({}),
+          'account': {'netcup_cid': _account.netcup_cid,
+          'netcup_key': _account.netcup_key,
+          'netcup_pwd': _account.netcup_pwd},
+          'status': _challenge.authorizations[_domain].challenges[0].status,
+          'cert_days': _challenge.cert_days | default(0)}}) }}
+
+    - name: "Set fact acme_netcup_data (wildcard)"
+      ansible.builtin.set_fact:
+        acme_netcup_data: >-
+          {{ acme_netcup_data |
+          combine({'*.' + _domain: {'data': _challenge.challenge_data['*.' + _domain]['dns-01'] | default({}),
+          'account': {'netcup_cid': _account.netcup_cid,
+          'netcup_key': _account.netcup_key,
+          'netcup_pwd': _account.netcup_pwd},
+          'status': _challenge.authorizations['*.' + _domain].challenges[0].status,
+          'cert_days': _challenge.cert_days | default(0)}}) }}
+
+    - name: "Set fact acme_netcup_challenges"
+      ansible.builtin.set_fact:
+        acme_netcup_challenges: >-
+          {{ acme_netcup_challenges | default({}) |
+          combine({_domain: {'data': _challenge, 'account_key': acme_netcup_account_key_path}}) }}
+
+    - name: "Debug acme_netcup_data"
+      ansible.builtin.debug:
+        msg: "{{ acme_netcup_data }}"
+      when: acme_netcup_debug | bool

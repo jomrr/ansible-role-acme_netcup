@@ -1,0 +1,53 @@
+---
+# role: ansible-role-acme_netcup
+# file: tasks/acme.yml
+
+- name: "Include acme-accounts.yml"
+  no_log: "{{ acme_netcup_nolog }}"
+  ansible.builtin.include_tasks:
+    file: tasks/acme-accounts.yml
+  loop: "{{ acme_netcup_conf }}"
+  loop_control:
+    loop_var: _account
+
+- name: "Create TXT records for DNS challenge"
+  community.general.netcup_dns:
+    api_key: "{{ acme_netcup_data[item].account.netcup_key }}"
+    api_password: "{{ acme_netcup_data[item].account.netcup_pwd }}"
+    customer_id: "{{ acme_netcup_data[item].account.netcup_cid }}"
+    domain: "{{ item | regex_replace('^\\*\\.', '') }}"
+    name: "{{ acme_netcup_data[item].data.resource }}"
+    type: "TXT"
+    value: "{{ acme_netcup_data[item].data.resource_value }}"
+    state: present
+  loop: "{{ acme_netcup_data.keys() | list }}"
+  register: _dnsrecords
+  when: acme_netcup_data[item].data.resource is defined
+    and acme_netcup_data[item].cert_days < acme_netcup_remaining_days
+
+- name: "Wait for DNS propagation"
+  ansible.builtin.debug:
+    msg: "{{ item }}: {{ acme_netcup_data[item].data.resource_value }}"
+  until: >-
+    acme_netcup_data[item].data.resource_value in
+    query('community.general.dig',
+    "_acme-challenge." + item | regex_replace('^\\*\\.', '') + "/TXT",
+    "@8.8.8.8", retry_servfail=true)
+  retries: 60
+  delay: 60
+  loop: "{{ acme_netcup_data.keys() | list }}"
+  when: _dnsrecords is succeeded and acme_netcup_data[item].data.resource is defined
+
+- name: "Debug acme_netcup_challenges"
+  ansible.builtin.debug:
+    msg: "{{ acme_netcup_challenges }}"
+  when: acme_netcup_debug | bool and acme_netcup_challenges is defined
+
+- name: "Include acme-certs.yml"
+  no_log: "{{ acme_netcup_nolog }}"
+  ansible.builtin.include_tasks:
+    file: tasks/acme-certs.yml
+  loop: "{{ acme_netcup_challenges.keys() | list }}"
+  loop_control:
+    loop_var: _domain
+  when: acme_netcup_challenges is defined
