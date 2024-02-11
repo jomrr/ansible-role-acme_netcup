@@ -4,6 +4,12 @@
 
 **Ansible role to generate LetsEncrypt certificates with Ansible and the Netcup DNS API.**
 
+This role is intended to implement a client-less management of letsencrypt
+certificates. It retrieves the certificates on a configured controller
+and pushes them to configured web servers via rsync oder ssh.
+Therfore no additional dependencies need to be installed and managed
+on the configured target machines.
+
 ## Supported Platforms
 
 | OS Family | Distribution  | Latest | Supported Version(s) | Comment |
