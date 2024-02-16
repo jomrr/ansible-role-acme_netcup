@@ -5,12 +5,12 @@
 galaxy_info:
   author: Jonas Mauer
   company: none
-  description: Ansible role to issue letsencrypt certificates with certbot and netcup dns challenge.
+  description: Ansible role to issue letsencrypt certificates with the netcup dns challenge.
   license: MIT
   namespace: jam82
   role_name: acme_netcup
 
-  issue_tracker_url: https://github.com/jam82/ansible-role-certbot_dns_netcup/issues
+  issue_tracker_url: https://github.com/jam82/ansible-role-acme_netcup/issues
 
   min_ansible_version: "2.15"
 

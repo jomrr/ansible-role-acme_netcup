@@ -6,8 +6,8 @@
 
 This role is intended to implement a client-less management of letsencrypt
 certificates. It retrieves the certificates on a configured controller
-and pushes them to configured web servers via rsync oder ssh.
-Therfore no additional dependencies need to be installed and managed
+and pushes them to configured web servers via rsync over ssh.
+Therefore no additional dependencies need to be installed and managed
 on the configured target machines.
 
 ## Supported Platforms
