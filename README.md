@@ -76,7 +76,7 @@ A simple default example playbook for using jam82.acme_netcup.
 ## Author(s) and License
 
 - :octocat:                 Author::    [jam82](https://github.com/jam82)
-- :triangular_flag_on_post: Copyright:: 2024 Jonas Mauer
+- :triangular_flag_on_post: Copyright:: 2024, Jonas Mauer
 - :page_with_curl:          License::   [MIT](LICENSE)
 
 ## References
