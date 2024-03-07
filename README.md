@@ -30,7 +30,7 @@ collections:
   - community.general
   - containers.podman
 
-roles:
+roles: []
 ```
 
 ## Supported Platforms
