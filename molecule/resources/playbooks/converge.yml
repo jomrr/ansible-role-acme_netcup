@@ -1,8 +1,8 @@
 ---
-# role: ansible-role-acme_netcup
+# name: jam82.ansible-role-acme_netcup
 # file: molecule/resources/playbooks/converge.yml
 
-- name: Converge
+- name: "PLAYBOOK | Converge"
   hosts: all
   roles:
-    - role: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
+    - role: "{{ lookup('ansible.builtin.env', 'MOLECULE_PROJECT_DIRECTORY') }}"

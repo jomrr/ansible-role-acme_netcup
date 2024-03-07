@@ -1,8 +1,8 @@
 ---
-# role: ansible-role-acme_netcup
+# name: jam82.ansible-role-acme_netcup
 # file: molecule/resources/playbooks/prepare.yml
 
-- name: "Prepare containers"
+- name: "PLAYBOOK | Prepare"
   hosts: all
   become: true
   gather_facts: true

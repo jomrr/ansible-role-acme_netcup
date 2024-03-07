@@ -1,33 +1,35 @@
 ---
-# role: ansible-role-acme_netcup
+# name: jam82.ansible-role-acme_netcup
 # file: molecule/default/molecule.yml
 
 dependency:
   name: galaxy
-  options:
-    requirements-file: requirements.yml
+  requirements-file: meta/requirements.yml
+  role-file: meta/requirements.yml
 driver:
   name: podman
-lint: |
-  set -e
-  ansible-lint
+lint: set -e; ansible-lint
+platforms:
+  - command: null
+    entrypoint: null
+    image: docker.io/${uns:-jam82}/molecule-${img:-fedora}:${tag:-latest}
+    name: acme_netcup
+    pre_build_image: true
 provisioner:
-  name: ansible
   config_options:
     defaults:
+      callback_whitelist: profile_tasks
       interpreter_python: auto_silent
-      callback_whitelist: profile_tasks, timer, yaml
+      timer: null
+      yaml: null
     ssh_connection:
       pipelining: true
   log: true
+  name: ansible
   playbooks:
     converge: ../resources/playbooks/converge.yml
-    prepare: ../resources/playbooks/prepare.yml
     verify: ../resources/playbooks/verify.yml
+scenario:
+  name: default
 verifier:
   name: ansible
-platforms:
-  - name: acme_netcup
-    image: "docker.io/${uns:-jam82}/molecule-${img:-fedora}:${tag:-latest}"
-    pre_build_image: true
-    command: ""

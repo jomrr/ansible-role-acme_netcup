@@ -1,29 +1,21 @@
 ---
-# role: ansible-role-acme_netcup
+# name: jam82.acme_netcup
 # file: meta/main.yml
 
 galaxy_info:
-  author: Jonas Mauer
-  company: none
-  description: Ansible role to issue letsencrypt certificates with the netcup dns challenge.
-  license: MIT
   namespace: jam82
   role_name: acme_netcup
-
+  author: Jonas Mauer
+  company: none
+  description: Ansible role for setting up acme_netcup.
+  license: MIT
   issue_tracker_url: https://github.com/jam82/ansible-role-acme_netcup/issues
-
   min_ansible_version: "2.15"
-
-  platforms:
-    - name: Fedora
-      versions:
-        - all
-
   galaxy_tags:
     - acme
-    - certbot
-    - dns
+    - certificate
     - letsencrypt
+    - https
     - netcup
-
-dependencies: []
+    - ssl
+    - tls

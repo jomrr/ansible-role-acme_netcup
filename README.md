@@ -1,85 +1,27 @@
-# ansible-role-acme_netcup
+# Ansible role acme_netcup
 
 ![GitHub](https://img.shields.io/github/license/jam82/ansible-role-acme_netcup) ![GitHub last commit](https://img.shields.io/github/last-commit/jam82/ansible-role-acme_netcup) ![GitHub issues](https://img.shields.io/github/issues-raw/jam82/ansible-role-acme_netcup)
 
-**Ansible role to generate LetsEncrypt certificates with Ansible and the Netcup DNS API.**
+**Ansible role for setting up acme_netcup.**
 
-This role is intended to implement a client-less management of letsencrypt
-certificates. It retrieves the certificates on a configured controller
-and pushes them to configured web servers via rsync over ssh.
-Therefore no additional dependencies need to be installed and managed
-on the configured target machines.
+## Description
 
-## Supported Platforms
+This role is intended to implement a client-less management of letsencrypt certificates. It retrieves the certificates on a configured controller and pushes them to configured web servers via rsync over ssh. Therefore no additional dependencies need to be installed and managed on the configured target machines.
 
-| OS Family | Distribution  | Latest | Supported Version(s) | Comment |
-|-----------|---------------|--------|----------------------|---------|
-| Alpine    | Alpine        | :heavy_check_mark: | 3.18, 3.19 | |
-| Archlinux | Archlinux     | :heavy_check_mark: | - | |
-| Debian    | Debian        | :heavy_check_mark: | 11, 12 | |
-|           | Ubuntu        | :heavy_check_mark: | 22.04 | |
-| RedHat    | Almalinux     | :heavy_check_mark: | 8, 9 | |
-|           | Fedora        | :heavy_check_mark: | 38, 39 | |
-|           | Oraclelinux   | :heavy_check_mark: | 8 | |
-| Suse      | OpenSuse Leap | :heavy_check_mark: | 15.5 | |
-|           | Tumbleweed    | :heavy_check_mark: | - | |
 
-## Requirements
+## Prerequisites
 
-Ansible 2.15 or higher.
+This role has no special prerequisites.
 
-## Variables
+### System packages (Fedora)
 
-Variables and defaults for this role.
+- `python3` (Python 3.8 or later)
 
-### defaults/main.yml
+### Python (requirements.txt)
 
-```yaml
----
-# role: ansible-role-acme_netcup
-# file: defaults/main.yml
+- ansible >= 2.15
 
-# Account and domain configuration for netcup dns challenge
-# default: []
-acme_netcup_conf: []
-#  - name: home
-#    email: admin@example.com
-#    netcup_cid: 081500
-#    netcup_key: testkey
-#    netcup_pwd: testpwd
-#    domains:
-#      - example.com
-
-# Deactivate authentication objects (authz) after issuing a certificate
-# default: true
-acme_netcup_deactivate_authzs: true
-
-# Debug flag
-# default: false
-acme_netcup_debug: false
-
-# Target directory for accounts, keys, csrs and certificates.
-# default: /etc/acme-staging
-acme_netcup_dir: /etc/acme-staging
-
-# The letsecrypt endpoint / directory to use, defaults to staging.
-# staging: https://acme-staging-v02.api.letsencrypt.org/directory
-# production: https://acme-v02.api.letsencrypt.org/directory
-#
-# default: "https://acme-staging-v02.api.letsencrypt.org/directory"
-acme_netcup_endpoint: "https://acme-staging-v02.api.letsencrypt.org/directory"
-
-# nolog option, true ~= do not log, false ~= log
-# default: true
-acme_netcup_nolog: true
-
-# Remaining days a certificate must be valid, before it is renewed.
-# cert_days < remaining_days
-# default: 20
-acme_netcup_remaining_days: 20
-```
-
-## Dependencies
+## Dependencies (requirements.yml)
 
 ```yaml
 collections:
@@ -88,32 +30,57 @@ collections:
   - community.general
   - containers.podman
 
-roles: []
+roles:
 ```
+
+## Supported Platforms
+
+| OS Family | Distribution | Version | Container Image |
+|-----------|--------------|---------|-----------------|
+| RedHat | AlmaLinux | 8 | [jam82/molecule-almalinux:8]( https://hub.docker.com/r/jam82/molecule-almalinux ) |
+| | | 9 | [jam82/molecule-almalinux:9]( https://hub.docker.com/r/jam82/molecule-almalinux ) |
+| Alpine | Alpine | 3.18 | [jam82/molecule-alpine:3.18]( https://hub.docker.com/r/jam82/molecule-alpine ) |
+| | | 3.19 | [jam82/molecule-alpine:3.19]( https://hub.docker.com/r/jam82/molecule-alpine ) |
+| Debian | Debian | 11 | [jam82/molecule-debian:11]( https://hub.docker.com/r/jam82/molecule-debian ) |
+| | | 12 | [jam82/molecule-debian:12]( https://hub.docker.com/r/jam82/molecule-debian ) |
+| RedHat | Fedora | 39 | [jam82/molecule-fedora:39]( https://hub.docker.com/r/jam82/molecule-fedora ) |
+| | | 40 | [jam82/molecule-fedora:40]( https://hub.docker.com/r/jam82/molecule-fedora ) |
+| | | rawhide | [jam82/molecule-fedora:rawhide]( https://hub.docker.com/r/jam82/molecule-fedora ) |
+| Debian | Ubuntu | 20.04 | [jam82/molecule-ubuntu:20.04]( https://hub.docker.com/r/jam82/molecule-ubuntu ) |
+| | | 22.04 | [jam82/molecule-ubuntu:22.04]( https://hub.docker.com/r/jam82/molecule-ubuntu ) |
+| | | 24.04 | [jam82/molecule-ubuntu:24.04]( https://hub.docker.com/r/jam82/molecule-ubuntu ) |
+
+## Role Variables
+
+No role default variables specified, see [defaults/main.yml](defaults/main.yml).
 
 ## Example Playbook
 
-> Install the role to your roles path
+Example playbooks(s) that show how to use this role.
 
+## Simple example playbook
+
+A simple default example playbook for using jam82.acme_netcup.
 ```yaml
 ---
-# role: ansible-role-acme_netcup
-# file: site.yml
+# name: "jam82.acme_netcup"
+# file: "playbook_acme_netcup.yml"
 
-- hosts: all
+- name: "PLAYBOOK | acme_netcup"
+  hosts: all
   gather_facts: true
   roles:
-    - role: acme_netcup
+    - role: "jam82.acme_netcup"
 ```
 
-## License and Author
+## License, Author(s) and Contributors
 
-- Author:: [jam82](https://github.com/jam82/)
-- Copyright:: 2024, [jam82](https://github.com/jam82/)
+This role is published under the [MIT License](LICENSE)
 
-Licensed under [MIT License](https://opensource.org/licenses/MIT).
-See [LICENSE](https://github.com/jam82/ansible-role-acme_netcup/blob/master/LICENSE) file in repository.
+and was initially created in 2024 by Jonas Mauer (@jam82).## References
 
-## References
+The following are the default variables that should be adjusted:
 
 - [Community.Crypto](https://docs.ansible.com/ansible/latest/collections/community/crypto/index.html)
+
+---

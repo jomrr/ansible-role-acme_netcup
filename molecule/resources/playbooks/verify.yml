@@ -1,8 +1,8 @@
 ---
-# role: ansible-role-acme_netcup
+# name: jam82.ansible-role-acme_netcup
 # file: molecule/resources/playbooks/verify.yml
 
-- name: Check Let's Encrypt Certificate and Chain Validity
+- name: "PLAYBOOK | Verify | acme_netcup"
   hosts: all
   gather_facts: true
   tasks:

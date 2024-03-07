@@ -1,0 +1,11 @@
+---
+# name: jam82.acme_netcup
+# file: meta/requirements.yml
+
+collections:
+  - ansible.posix
+  - community.crypto
+  - community.general
+  - containers.podman
+
+roles: []
