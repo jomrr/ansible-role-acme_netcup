@@ -77,9 +77,9 @@ A simple default example playbook for using jam82.acme_netcup.
 
 This role is published under the [MIT License](LICENSE)
 
-and was initially created in 2024 by Jonas Mauer (@jam82).## References
+and was initially created in 2024 by Jonas Mauer (@jam82).
 
-The following are the default variables that should be adjusted:
+## References
 
 - [Community.Crypto](https://docs.ansible.com/ansible/latest/collections/community/crypto/index.html)
 
