@@ -73,11 +73,11 @@ A simple default example playbook for using jam82.acme_netcup.
     - role: "jam82.acme_netcup"
 ```
 
-## License, Author(s) and Contributors
+## Author(s) and License
 
-This role is published under the [MIT License](LICENSE)
-
-and was initially created in 2024 by Jonas Mauer (@jam82).
+- Author::    :octocat: [jam82](https://github.com/jam82)
+- Copyright:: :triangular_flag_on_post: 2024 Jonas Mauer
+- License::   :page_with_curl: [MIT](LICENSE)
 
 ## References
 
