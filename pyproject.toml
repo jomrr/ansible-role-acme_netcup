@@ -5,7 +5,7 @@ description = "Ansible role for setting up acme_netcup."
 authors = ["Jonas Mauer"]
 license = "MIT"
 keywords = ["acme", "certificate", "letsencrypt", "https", "netcup", "ssl", "tls"]
-repository = "https://github.com/jam82/ansible-role-acme_netcup"
+repository = "https://github.com/jomrr/ansible-role-acme_netcup"
 
 [tool.commitizen]
 name = "cz_conventional_commits"
