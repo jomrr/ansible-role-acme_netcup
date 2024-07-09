@@ -1,0 +1,11 @@
+---
+# role: jomrr.acme_netcup
+# file: meta/requirements.yml
+
+collections:
+  - {'name': 'ansible.posix'}
+  - {'name': 'community.crypto'}
+  - {'name': 'community.general'}
+  - {'name': 'containers.podman'}
+
+roles: []
