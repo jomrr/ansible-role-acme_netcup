@@ -24,6 +24,10 @@ provisioner:
       yaml: null
     ssh_connection:
       pipelining: true
+    inventory:
+      host_vars:
+        acme_netcup:
+          ansible_python_interpreter: auto_silent
   log: true
   name: ansible
   playbooks:

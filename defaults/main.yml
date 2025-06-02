@@ -4,7 +4,40 @@
 
 # Account and domain configuration for netcup dns challenge
 # default: []
-acme_netcup_conf: []
+# acme_netcup_conf:
+#   - name: home
+#     email: jonas.mauer@web.de
+#     netcup_cid: 94201
+#     netcup_key: MjlIQUI5OHExMTc2NTUzRmZyajcxYUszMm1vNFZSNDRHYlFtU1
+#     netcup_pwd: sWXXzWFOVTr1B7lmRFRDSmvdwXg/C3t3Rge6VQ9svdgq8m5Wd0
+#     certificates:
+#       - cn: mauer.in
+#         san:
+#           - mauer.in
+#           - '*.mauer.in'
+#           - '*.lan.mauer.in'
+#       - cn: jomrr.de
+#         san:
+#           - jomrr.de
+#           - '*.jomrr.de'
+
+acme_netcup_conf:
+  - name: home
+    email: cert@mauer.in
+    netcup_cid: 081500
+    netcup_key: home-key
+    netcup_pwd: home-pwd
+    certificates:
+      - cn: mauer.in
+        san:
+          - mauer.in
+          - '*.mauer.in'
+          - '*.lan.mauer.in'
+      - cn: jomrr.de
+        san:
+          - jomrr.de
+          - '*.jomrr.de'
+
 #  - name: home
 #    email: admin@example.com
 #    netcup_cid: 081500

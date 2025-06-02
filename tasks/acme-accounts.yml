@@ -7,19 +7,19 @@
     acme_netcup_account_key_path: >-
       {{ acme_netcup_dir }}/accounts/{{ _account.name }}.pem
 
-- name: Check if account key exists
-  ansible.builtin.stat:
-    path: "{{ acme_netcup_account_key_path }}"
-  register: _account_key
+# - name: Check if account key exists
+#   ansible.builtin.stat:
+#     path: "{{ acme_netcup_account_key_path }}"
+#   register: _account_key
 
 - name: Create account key
   become: true
   no_log: "{{ acme_netcup_nolog }}"
   community.crypto.openssl_privatekey:
     path: "{{ acme_netcup_account_key_path }}"
-  when: not _account_key.stat.exists
+  # when: not _account_key.stat.exists
 
-- name: Include challenges.yml
+- name: Include acme-challenges.yml
   ansible.builtin.include_tasks:
     file: tasks/acme-challenges.yml
   loop: "{{ _account.domains }}"

@@ -1,0 +1,43 @@
+---
+# role: ansible-role-acme_netcup
+# file: vars/main.yml
+
+_acme_netcup_packages:
+  Alpine:
+    - openssl
+    - py3-dnspython
+    - py3-packaging
+    - py3-pip
+  Archlinux:
+    - openssl
+    - python-dnspython
+    - python-packaging
+    - python-pip
+  Debian:
+    - openssl
+    - python3-dnspython
+    - python3-packaging
+    - python3-pip
+  RedHat:
+    - openssl
+    - python3-cryptography
+    - python3-dns
+    - python3-packaging
+    - python3-pip
+  Suse:
+    - openssl
+    - python3-dnspython
+    - python3-packaging
+    - python3-pip
+
+acme_netcup_packages: "{{ _acme_netcup_packages.get(ansible_distribution, _acme_netcup_packages.get(ansible_os_family)) }}"
+
+_acme_netcup_pip_extra_args:
+  Alpine: "--break-system-packages --user --upgrade"
+  Archlinux: "--break-system-packages --user --upgrade"
+  Debian: "--break-system-packages --user --upgrade"
+  "openSUSE Tumbleweed": "--break-system-packages --user --upgrade"
+  RedHat: "--user --upgrade"
+  Suse: "--break-system-packages --user --upgrade"
+
+acme_netcup_pip_extra_args: "{{ _acme_netcup_pip_extra_args.get(ansible_distribution, _acme_netcup_pip_extra_args.get(ansible_os_family)) }}"

@@ -32,7 +32,7 @@
     acme_netcup_data[item].data.resource_value in
     query('community.general.dig',
     "_acme-challenge." + item | regex_replace('^\\*\\.', '') + "/TXT",
-    "@8.8.8.8", retry_servfail=true)
+    "@9.9.9.9", retry_servfail=true)
   retries: 60
   delay: 60
   loop: "{{ acme_netcup_data.keys() | list }}"
